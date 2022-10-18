@@ -1,5 +1,6 @@
 require('dotenv').config()
 require('express-async-errors')
+const Student = require('./models/Student')
 const { StatusCodes } = require('http-status-codes')
 const express = require('express')
 const app = express()
@@ -10,6 +11,8 @@ const authenticationUser = require('./middleware/authentication')
 
 //routers
 const authRouter = require('./routes/auth')
+const stdRouter = require('./routes/student')
+
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found')
@@ -37,12 +40,19 @@ app.use(helmet())
 app.use(cors())
 app.use(xss())
 
+//View Jobs WithOut Auth
+app.get('/api/v1/public', async (req, res) => {
+  const stds = await Student.find().sort('createdAt')
+  res.status(StatusCodes.OK).json({ stds, count: stds.length })
+})
 
 // routes
-app.use('/api/v1/auth', authRouter)
 app.get('/', (req, res) => {
   res.send('<h1>API Running</h1><p>Use /api/v1/auth </p>')
 })
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/stds', authenticationUser, stdRouter)
+
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
