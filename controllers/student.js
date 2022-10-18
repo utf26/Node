@@ -1,4 +1,4 @@
-const Student = require('../models/Student')
+const Student = require('../Models/Student')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 

@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('express-async-errors')
-const Student = require('./models/Student')
+const Student = require('./Models/Student')
 const { StatusCodes } = require('http-status-codes')
 const express = require('express')
 const app = express()
