@@ -11,6 +11,7 @@ const authenticationUser = require('./middleware/authentication')
 
 //routers
 const authRouter = require('./routes/auth')
+const updateUserRouter = require('./routes/updateUser')
 const stdRouter = require('./routes/student')
 
 
@@ -51,7 +52,7 @@ app.get('/', (req, res) => {
   res.send('<h1>API Running</h1><p>Use /api/v1/auth </p>')
 })
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/auth/updateUser',authenticationUser, authRouter)
+app.use('/api/v1/updateUser',authenticationUser, updateUserRouter)
 app.use('/api/v1/stds', authenticationUser, stdRouter)
 
 
