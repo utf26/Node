@@ -4,7 +4,7 @@ const { BadRequestError, NotFoundError } = require('../errors')
 
 const createStudent = async (req, res) => {
     req.body.createdBy = req.user.userId
-    console.log(req.body)
+    // console.log(req.body)
     const std = await Student.create(req.body)
     res.status(StatusCodes.CREATED).json({ std })
 }
