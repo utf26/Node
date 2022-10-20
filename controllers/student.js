@@ -91,6 +91,7 @@ const deleteStudent = async (req, res) => {
         user: { userId },
         params: { id: stdId }
     } = req
+    // console.log(userId) //Limit Deletion by role
     const std = await Student.findOneAndRemove({
         _id: stdId,
         createdBy: userId
