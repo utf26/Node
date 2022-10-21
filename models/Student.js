@@ -142,6 +142,11 @@ const StudentSchema = new mongoose.Schema({
     completed_hours: {
         type: Number,
     },
+    status: {
+        type: String,
+        enum: ['enrolled', 'past'],
+        default: 'enrolled'
+    },
     tls: [tls],
     lesson_log: [lesson_log],
     hour_log: [hour_log],

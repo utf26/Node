@@ -10,12 +10,12 @@ const createStudent = async (req, res) => {
 }
 //For Testing, Public Route
 const getAllStdP = async (req, res) => {
-    const stds = await Student.find().sort('createdAt')
+    const stds = await Student.find().limit(2).sort('createdAt')
     res.status(StatusCodes.OK).json({ stds, count: stds.length })
 }
 
 const getAllStds = async (req, res) => {
-    const stds = await Student.find({ createdBy: req.user.userId }).sort('createdAt')
+    const stds = await Student.find({ status: req.body.status }).skip((req.body.page > 0) ? req.body.page*24 : 0||0).limit(24)
     res.status(StatusCodes.OK).json({ stds, count: stds.length })
 }
 

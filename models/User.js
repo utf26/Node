@@ -25,11 +25,16 @@ const UserSchema = new mongoose.Schema({
         required: [true, 'Please Provide Name'],
         minlenght: 6,
     },
-    role: {
+    type: {
         type: String,
         enum: ['Admin', 'Teacher'],
         default: 'Teacher'
-    }
+    },
+    designation: {
+        type: String,
+        required: [true, 'Please Provide The Designation'],
+        default: 'Teacher'
+    },
 })
 
 UserSchema.pre('save', async function () {
