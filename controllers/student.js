@@ -15,7 +15,7 @@ const getAllStdP = async (req, res) => {
 }
 
 const getAllStds = async (req, res) => {
-    const stds = await Student.find({ status: req.body.status }).skip((req.body.page > 0) ? req.body.page*24 : 0||0).limit(24)
+    const stds = await Student.find({ status: req.body.status }).skip((req.body.page > 0) ? req.body.page*req.body.limit : 0||0).limit(req.body.limit||24)
     res.status(StatusCodes.OK).json({ stds, count: stds.length })
 }
 
@@ -99,7 +99,7 @@ const deleteStudent = async (req, res) => {
     if (!std) {
         throw new NotFoundError(`No Student With Id ${stdId}`)
     }
-    res.status(StatusCodes.OK).send()
+    res.status(StatusCodes.OK).send("Student Has Been Deleted")
 }
 
 module.exports = {

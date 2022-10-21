@@ -1,7 +1,7 @@
 const User = require("../Models/User")
 const bcrypt = require('bcryptjs')
 const { StatusCodes } = require('http-status-codes')
-const { BadRequestError, UnauthenticatedError } = require('../errors')
+const { BadRequestError,NotFoundError, UnauthenticatedError } = require('../errors')
 
 const updateUser = async (req, res) => {
     const {
@@ -24,7 +24,7 @@ const updateUser = async (req, res) => {
     {new:true,runValidators:true}
     )
     if (!user) {
-        throw new NotFoundError(`No Job With Id ${PId}`)
+        throw new NotFoundError(`No User With Id ${PId}`)
     }
     res.status(StatusCodes.OK).json("Updated")
 }
@@ -42,7 +42,24 @@ const getUser = async (req, res) => {
     res.status(StatusCodes.OK).json({ user: { name: user.name, email: user.email, type: user.type, designation: user.designation }})
 }
 
+const deleteUser = async (req, res) => {
+    const {
+        user: { AId },
+        params: { id: userId }
+    } = req
+    // console.log(userId) //Limit Deletion by role
+    const user = await User.findOneAndRemove({
+        _id: userId,
+        createdBy: AId
+    })
+    if (!user) {
+        throw new NotFoundError(`No Student With Id ${userId}`)
+    }
+    res.status(StatusCodes.OK).send("User has been Deleted")
+}
+
 module.exports = {
     updateUser,
+    deleteUser,
     getUser
 } 
