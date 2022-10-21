@@ -15,7 +15,7 @@ const getAllStdP = async (req, res) => {
 }
 
 const getAllStds = async (req, res) => {
-    const stds = await Student.find({ status: req.body.status }).skip((req.body.page > 0) ? req.body.page*req.body.limit : 0||0).limit(req.body.limit||24)
+    const stds = await Student.find({ status: req.body.status }).skip((req.body.page > 0) ? req.body.page*req.body.limit : 0||0).limit(req.body.limit||24).sort(req.body.filter||'createdAt')
     res.status(StatusCodes.OK).json({ stds, count: stds.length })
 }
 
