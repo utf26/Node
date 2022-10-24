@@ -1,16 +1,29 @@
 const User = require("../Models/User")
 const bcrypt = require('bcryptjs')
 const { StatusCodes } = require('http-status-codes')
-const { BadRequestError,NotFoundError, UnauthenticatedError } = require('../errors')
+const { BadRequestError, NotFoundError, UnauthenticatedError } = require('../errors')
+
+const register = async (req, res) => {
+    const FindUser = await User.findOne({
+        _id: req.user.userId
+    })
+    if(FindUser.type=="Admin"){
+        const user = await User.create({ ...req.body })
+        const token = user.createJWT()
+        res.status(StatusCodes.CREATED).json({ user: { id: user._id, name: user.name, email: user.email, type: user.type, designation: user.designation }, token })
+    }else{
+        throw new UnauthenticatedError('Insufficient Privileges')
+    }
+}
 
 const updateUser = async (req, res) => {
     const {
-        body: { name, email, password},
+        body: { name, email, password },
         user: { userId },
         params: { id: PId }
     } = req
     if (userId !== PId) {
-        throw new BadRequestError('Invalid user ID')
+        throw new UnauthenticatedError('Invalid user ID')
     }
     if (name === '' || email === '' || password === '') {
         throw new BadRequestError('Fields Cannot be Empty')
@@ -20,8 +33,8 @@ const updateUser = async (req, res) => {
     const user = await User.findOneAndUpdate({
         _id: PId
     },
-    req.body,
-    {new:true,runValidators:true}
+        req.body,
+        { new: true, runValidators: true }
     )
     if (!user) {
         throw new NotFoundError(`No User With Id ${PId}`)
@@ -39,7 +52,7 @@ const getUser = async (req, res) => {
     if (!user) {
         throw new NotFoundError(`No User With Id ${userId}`)
     }
-    res.status(StatusCodes.OK).json({ user: { name: user.name, email: user.email, type: user.type, designation: user.designation }})
+    res.status(StatusCodes.OK).json({ user: { name: user.name, email: user.email, type: user.type, designation: user.designation } })
 }
 
 const deleteUser = async (req, res) => {
@@ -59,6 +72,7 @@ const deleteUser = async (req, res) => {
 }
 
 module.exports = {
+    register,
     updateUser,
     deleteUser,
     getUser

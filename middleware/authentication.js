@@ -14,6 +14,10 @@ const auth = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_SECRET)
     // attach the user to the std routes
     req.user = { userId: payload.userId, name: payload.name }
+    const user = await User.findOne({
+      _id: req.user.userId
+    })
+    console.log(user.type)
     next()
   } catch (error) {
     throw new UnauthenticatedError('Authentication invalid')
