@@ -1,23 +1,24 @@
-require('dotenv').config()
-require('express-async-errors')
-const Student = require('../Models/Student')
+require('dotenv').config();
+require('express-async-errors');
+
+const Student = require('./Models/Student')
 const { StatusCodes } = require('http-status-codes')
 const express = require('express')
 const app = express()
 
 // connectDB && middlewares
-const connectDB = require('../db/connect')
-const authenticationUser = require('../middleware/authentication')
+const connectDB = require('./db/connect')
+const authenticationUser = require('./middleware/authentication')
 
 //routers
-const authRouter = require('../routes/auth')
-const userRouter = require('../routes/user')
-const stdRouter = require('../routes/student')
+const authRouter = require('./routes/auth')
+const userRouter = require('./routes/user')
+const stdRouter = require('./routes/student')
 
 
 // error handler
-const notFoundMiddleware = require('../middleware/not-found')
-const errorHandlerMiddleware = require('../middleware/error-handler')
+const notFoundMiddleware = require('./middleware/not-found')
+const errorHandlerMiddleware = require('./middleware/error-handler')
 
 app.use(express.json())
 // extra packages
