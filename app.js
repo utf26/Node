@@ -62,7 +62,7 @@ app.use(errorHandlerMiddleware)
 
 const port = process.env.PORT || 3000
 
-const start = async () => {
+const server = async () => {
   try {
     await connectDB(process.env.MONGO_URL)
     app.listen(port, () =>
@@ -73,5 +73,4 @@ const start = async () => {
   }
 }
 
-
-start()
+server()
