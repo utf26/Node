@@ -1,20 +1,34 @@
 const Student = require('../Models/Student')
+const User = require('../Models/User')
 const { StatusCodes } = require('http-status-codes')
-const { BadRequestError, NotFoundError } = require('../errors')
+const { BadRequestError, NotFoundError, UnauthenticatedError } = require('../errors')
 
 const createStudent = async (req, res) => {
-    req.body.createdBy = req.user.userId
-    const std = await Student.create(req.body)
-    res.status(StatusCodes.CREATED).json({ std })
-}
-//For Testing, Public Route
-const getAllStdP = async (req, res) => {
-    const stds = await Student.find().limit(2).sort('createdAt')
-    res.status(StatusCodes.OK).json({ stds, count: stds.length })
+    const FindUser = await User.findOne({
+        _id: req.user.userId
+    })
+    if (FindUser.type == "Admin" || FindUser.isHead == true) {
+        req.body.createdBy = req.user.userId
+        const std = await Student.create(req.body)
+        res.status(StatusCodes.CREATED).json({ std })
+    } else {
+        throw new UnauthenticatedError('Insufficient Privileges')
+    }
 }
 
+//For Testing, Public Route
+// const getAllStdP = async (req, res) => {
+//     const stds = await Student.find().limit(2).sort('createdAt')
+//     res.status(StatusCodes.OK).json({ stds, count: stds.length })
+// }
+
 const getAllStds = async (req, res) => {
-    const stds = await Student.find({ status: req.body.status }).skip((req.body.page > 0) ? req.body.page*req.body.limit : 0||0).limit(req.body.limit||24).sort(req.body.filter||'createdAt')
+    let stds = ""
+    if (req.body.search) {
+        stds = await Student.find({ name: new RegExp(req.body.search, 'i'), status: req.body.status }).skip((req.body.page > 0) ? req.body.page * req.body.limit : 0 || 0).limit(req.body.limit || 24).sort(req.body.filter || 'createdAt')
+    } else {
+        stds = await Student.find({ status: req.body.status }).skip((req.body.page > 0) ? req.body.page * req.body.limit : 0 || 0).limit(req.body.limit || 24).sort(req.body.filter || 'createdAt')
+    }
     res.status(StatusCodes.OK).json({ stds, count: stds.length })
 }
 
@@ -90,15 +104,20 @@ const deleteStudent = async (req, res) => {
         user: { userId },
         params: { id: stdId }
     } = req
-    // console.log(userId) //Limit Deletion by role
-    const std = await Student.findOneAndRemove({
-        _id: stdId,
-        createdBy: userId
+    const FindUser = await User.findOne({
+        _id: userId
     })
-    if (!std) {
-        throw new NotFoundError(`No Student With Id ${stdId}`)
+    if (FindUser.type == "Admin" || FindUser.isHead == true ) {
+        const std = await Student.findOneAndRemove({
+            _id: stdId
+        })
+        if (!std) {
+            throw new NotFoundError(`No Student With Id ${stdId}`)
+        }
+        res.status(StatusCodes.OK).send("Student Has Been Deleted")
+    } else {
+        throw new UnauthenticatedError('Insufficient Privileges')
     }
-    res.status(StatusCodes.OK).send("Student Has Been Deleted")
 }
 
 module.exports = {
@@ -106,6 +125,6 @@ module.exports = {
     getAllStds,
     getStudent,
     createStudent,
-    getAllStdP,
+    // getAllStdP,
     updateStudent
 }

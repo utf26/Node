@@ -22,7 +22,7 @@ const login = async (req, res) => {
         throw new UnauthenticatedError('Invalid Credentials')
     }
     const token = user.createJWT()
-    res.status(StatusCodes.OK).json({ user: {id:user._id, name: user.name, email: user.email, type: user.type, designation: user.designation }, token })
+    res.status(StatusCodes.OK).json({ user: {id:user._id, name: user.name, email: user.email, type: user.type, designation: user.designation, isHead: user.isHead }, token })
 
 }
 

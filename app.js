@@ -43,10 +43,10 @@ app.use(cors())
 app.use(xss())
 
 //View Students WithOut Auth
-app.get('/api/v1/public', async (req, res) => {
-  const stds = await Student.find().sort('createdAt')
-  res.status(StatusCodes.OK).json({ stds, count: stds.length })
-})
+// app.get('/api/v1/public', async (req, res) => {
+//   const stds = await Student.find().sort('createdAt')
+//   res.status(StatusCodes.OK).json({ stds, count: stds.length })
+// })
 
 // routes
 app.get('/', (req, res) => {

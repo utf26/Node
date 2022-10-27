@@ -154,8 +154,7 @@ const StudentSchema = new mongoose.Schema({
     lesson: [lesson],
     createdBy: {
         type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: [true, 'Please Provide User'],
+        ref: 'User'
     },
 }, { timestamps: true })
 
