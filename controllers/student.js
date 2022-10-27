@@ -1,5 +1,5 @@
-const Student = require('../Models/Student')
-const User = require('../Models/User')
+const Student = require('../models/Student')
+const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError, UnauthenticatedError } = require('../errors')
 
