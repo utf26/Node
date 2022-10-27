@@ -17,7 +17,6 @@ const auth = async (req, res, next) => {
     const user = await User.findOne({
       _id: req.user.userId
     })
-    console.log(user.type)
     next()
   } catch (error) {
     throw new UnauthenticatedError('Authentication invalid')
