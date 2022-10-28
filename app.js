@@ -55,8 +55,6 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/user',authenticationUser, userRouter)
 app.use('/api/v1/stds', authenticationUser, stdRouter)
-
-
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
