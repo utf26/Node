@@ -1,4 +1,4 @@
-const User = require('../Models/User')
+const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const { UnauthenticatedError } = require('../errors')
 
@@ -17,7 +17,6 @@ const auth = async (req, res, next) => {
     const user = await User.findOne({
       _id: req.user.userId
     })
-    console.log(user.type)
     next()
   } catch (error) {
     throw new UnauthenticatedError('Authentication invalid')

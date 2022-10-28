@@ -35,6 +35,10 @@ const UserSchema = new mongoose.Schema({
         required: [true, 'Please Provide The Designation'],
         default: 'Teacher'
     },
+    isHead: {
+        type: Boolean,
+        default: false
+    }
 })
 
 UserSchema.pre('save', async function () {

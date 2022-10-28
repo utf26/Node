@@ -1,7 +1,6 @@
 require('dotenv').config();
 require('express-async-errors');
-
-const Student = require('./Models/Student')
+const Student = require('./models/Student')
 const { StatusCodes } = require('http-status-codes')
 const express = require('express')
 const app = express()
@@ -43,10 +42,10 @@ app.use(cors())
 app.use(xss())
 
 //View Students WithOut Auth
-app.get('/api/v1/public', async (req, res) => {
-  const stds = await Student.find().sort('createdAt')
-  res.status(StatusCodes.OK).json({ stds, count: stds.length })
-})
+// app.get('/api/v1/public', async (req, res) => {
+//   const stds = await Student.find().sort('createdAt')
+//   res.status(StatusCodes.OK).json({ stds, count: stds.length })
+// })
 
 // routes
 app.get('/', (req, res) => {
